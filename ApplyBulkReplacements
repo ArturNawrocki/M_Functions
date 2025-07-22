@@ -1,0 +1,34 @@
+//───────────────────────────────────────────────────────────────
+//   ApplyBulkReplacements
+//   ----------------------
+//   Params:
+//     • Source        – the table to transform
+//     • Replacements  – a list whose items are
+//         { ColumnName , OldValue , NewValue , Replacer.Function }
+//   Returns:
+//     A new table with every rule applied in sequence.
+//───────────────────────────────────────────────────────────────
+let
+    ApplyBulkReplacements =
+        ( Source       as table,      // required
+          Replacements as list        // required
+        ) as table =>
+
+        let
+            // Single-rule helper (no recursion)
+            ReplaceFn =
+                (state as table, rule as list) as table =>
+                    Table.ReplaceValue(
+                        state,
+                        rule{1},            // old value
+                        rule{2},            // new value
+                        rule{3},            // Replacer (Text, Value, etc.)
+                        { rule{0} }         // column as a 1-item list
+                    ),
+
+            // Fold all rules onto the starting table
+            Result = List.Accumulate(Replacements, Source, ReplaceFn)
+        in
+            Result
+in
+    ApplyBulkReplacements
