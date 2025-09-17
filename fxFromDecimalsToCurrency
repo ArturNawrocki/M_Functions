@@ -1,3 +1,7 @@
+/* This function will search for all decimal columns and set them as currency.type (which fixed decmial numbers - 4 places after coma) which fulfill the DO NOT USE FLOATING POINT DAT TYPE from BPA */
+
+
+
 (
     #"Input Table" as table,
     optional #"Columns To Ignore" as nullable list
