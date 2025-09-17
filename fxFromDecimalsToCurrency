@@ -1,0 +1,37 @@
+(
+    #"Input Table" as table,
+    optional #"Columns To Ignore" as nullable list
+) as table =>
+let
+    // Resolve optional list (no case handling needed)
+    #"Columns To Ignore Resolved" = #"Columns To Ignore" ?? {},
+
+    // Read schema once
+    #"Schema" = Table.Schema(#"Input Table"),
+
+    // Decimal-like numbers = Kind "Number" minus Currency/Percentage/Integer types
+    #"Decimal Columns (All)" =
+        Table.SelectRows(
+            #"Schema",
+            each [Kind] = "number"
+                and [TypeName] <> "Currency.Type"
+                and [TypeName] <> "Percentage.Type"
+                and not List.Contains({"Int64.Type","Int32.Type","Int16.Type","Int8.Type"}, [TypeName])
+        )[Name],
+
+    // Ignore list (exact name match, case-sensitive as requested)
+    #"Existing Ignore Columns" =
+        List.Intersect({#"Columns To Ignore Resolved", Table.ColumnNames(#"Input Table")}),
+
+    // Final targets to convert
+    #"Decimal Columns" =
+        List.Difference(#"Decimal Columns (All)", #"Existing Ignore Columns"),
+
+    // Build {name, Currency.Type} pairs and apply
+    #"Pairs" = List.Transform(#"Decimal Columns", each { _, Currency.Type }),
+    #"Changed Type" =
+        if List.Count(#"Pairs") = 0
+        then #"Input Table"
+        else Table.TransformColumnTypes(#"Input Table", #"Pairs")
+in
+    #"Changed Type"
