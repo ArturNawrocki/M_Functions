@@ -23,8 +23,8 @@ let
                 (state as table, rule as list) as table =>
                     Table.ReplaceValue(
                         state,
-                        rule{1},            // old value
-                        rule{2},            // new value
+                        rule{0},            // old value
+                        rule{1},            // new value
                         Replacer.ReplaceText,            // Replacer (Text, Value, etc.)
                         { ColumnName  }         // column as a 1-item list
                     ),
