@@ -13,7 +13,7 @@
 let
     ApplyBulkReplacementsOneTextColumn =
         ( Source       as table, 
-          ColumnName as text       // required
+          ColumnName as text,       // required
           Replacements as list        // required
         ) as table =>
 
