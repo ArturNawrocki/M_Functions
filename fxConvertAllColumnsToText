@@ -1,0 +1,8 @@
+let
+    #"Function | Convert All to Text" = (SourceTable as table) as table =>
+        let
+            #"Changed Type | All to Text" = Table.TransformColumnTypes(SourceTable, List.Transform(Table.ColumnNames(SourceTable), each {_, type text}))
+        in
+            #"Changed Type | All to Text"
+in
+    #"Function | Convert All to Text"
