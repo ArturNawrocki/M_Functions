@@ -2,13 +2,15 @@
 //   ApplyBulkReplacementsOneTextColumn
 //   ----------------------
 //   Params:
-//     • Source        – the table to transform
-//     • ColumnName  – a chosen column
-//     • Replacements  – a list whose items are
+//     • Source        – the table to transform (a one of the steps in M code)
+//     • ColumnName  – a chosen column (without the square brackets and within quotation
+//     • Replacements  – a list whose items are to be replaced with what 
       
 //         { OldValue , NewValue}
 //   Returns:
 //     A new table with every rule applied in sequence.
+//
+//    Example: fxApplyBulkReplacementsOneTextColumn(#"Step | Used Before", "Name of column without aquare brackets", {{"ValueX", "ValueY"}, {"ValueZ", "ValueY"}})
 //───────────────────────────────────────────────────────────────
 let
     ApplyBulkReplacementsOneTextColumn =
